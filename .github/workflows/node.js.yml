@@ -17,22 +17,19 @@ jobs:
       contents: read
       pull-requests: write
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 16.x
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
     - run: npm run test
+    - name: Vitest Coverage Report
+      uses: davelosert/vitest-coverage-report-action@v2.8.2
     - uses: davelosert/vitest-coverage-report-action@v1
       with:
         vite-config-path: vite.config.ts
